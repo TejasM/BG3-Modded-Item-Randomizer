@@ -1,6 +1,16 @@
 # MIR — Modded Item Randomizer
 
-Takes the **modded equipment you installed and never see** and quietly seeds it into the world's loot. When you open a treasure chest, a wardrobe or a bookshelf, or loot a corpse, for the first time, MIR rolls — and sometimes a modded item is waiting there. Chests and corpses draw from your whole modded pool, wardrobes give you clothing, bookshelves give you scrolls, and barrels give you potions, arrows and ingredients if you switch them on.
+**Takes all of your modded equipment and seeds it into the world's loot, according to your specifications. This mod gives you clear, detailed controls in MCM over where modded items are placed — in treasure chests, on corpses, in wardrobes, in bookshelves and in barrels, each chosen separately — at a rate you control. Wardrobes give you clothing, bookshelves give you scrolls, barrels give you potions and arrows, and you can have the mod give you more kinds of item in each container if you want. The mod is strictly additive: it never removes, replaces, moves or reprices anything.**
+
+If you run dozens of equipment mods, you probably never see most of them. They never surface, because modded gear normally arrives through the tutorial chest, the camp chest, a vendor, or a console command — not through play. MIR hooks the moment loot appears: open a chest, a wardrobe or a bookshelf, or loot a corpse, for the first time, and MIR rolls. On a hit, one item from your modded pool is waiting in the loot panel on that first open. The game's own loot is untouched.
+
+**Why another random equipment mod?** I have used other equipment randomization mods and wanted one more suited to my personal preference. **Your preferences may vary, so I am not saying this mod is better than others — only different.**
+
+**The major difference:** this mod is strictly for adding modded items to the game through gameplay, according to your preferences.
+
+**No sidecar to run.** MIR applies itself at runtime; a single pak file is all that is needed. It auto-indexes all your modded items and adds them as you loot.
+
+**Designed for fine-tuning, transparency and ease of use.** You can exclude specific items and mods, and every control in MCM is detailed and, I hope, easy to understand.
 
 ```
   You open a chest for the first time.
@@ -8,8 +18,6 @@ Takes the **modded equipment you installed and never see** and quietly seeds it 
   On a hit, one item from your modded pool is added to the chest.
   It is there in the loot panel, on that first open.
 ```
-
-If you run thirty equipment mods, you probably wear four items from them. The rest never surface, because modded gear normally arrives through a mod's own tutorial chest, a vendor the author added, or a console command — never through play. MIR fixes that. It is **strictly additive**: it never removes, replaces, moves or reprices anything, and the game's own loot is untouched by default.
 
 ## ➤ How to use — please read this
 
@@ -29,7 +37,7 @@ Once installed (see `INSTALL.md`), it works out of the box:
 - **Bookshelves give scrolls.** Bookcases, book rows, stacks and piles, scroll shelves and desks are their own type, on by default, holding scrolls — vanilla and modded — with an option to add everything else.
 - **Clutter gives consumables.** Off by default. When on, barrels, crates, vases and urns hand out potions, arrows and alchemy ingredients — vanilla and modded — and those items never leak into chests.
 - **A two-stage roll you can tune.** *How often* (base chance and rolls per opportunity) is separate from *what* (a 0–100 slider per category). The MIR Browser shows each category's live percentage per container type.
-- **Equipment never drops twice in the same save.** A per-save ledger takes it out of the pool for good. Consumables — potions, arrows, ingredients, scrolls — are exempt and can repeat.
+- **Equipment never spawns twice in the same save — guaranteed.** When MIR gives you a weapon, armour piece, ring, amulet or cosmetic garment, it removes that item's template from the live pool and records it in a per-save ledger stored in the savegame's mod variables. Every time the save loads, the ledger is read back and every recorded item is removed from the pool again. So across an entire playthrough, no piece of equipment is handed out a second time by MIR. Consumables — potions, arrows, ingredients, scrolls — are deliberately exempt and can repeat.
 - **Exclusion browser.** Every mod contributing items, sorted by count; drill into a mod and tick out a whole mod or a single item. Changes apply immediately and persist per MCM profile.
 - **Items a mod already places in the world are kept out of the pool** by default, so MIR never hands you a duplicate of an authored drop. You can let individual items back in.
 - **Known utility mods are fenced out** by default — photo-mode rings, cheat spawners, framework libraries — so the first thing MIR gives you is not a photo-mode ring (which is exactly what happened in development).
@@ -150,6 +158,9 @@ MIR makes exactly eight engine calls, and only one of them changes anything: the
 
 **Q: Nothing ever spawns.**
 A: Run `!mir_status` in the Script Extender console (type `server` first). If the MCM field reads `MISSING - MIR DORMANT`, MCM is not in your load order and MIR has switched itself off. Otherwise look for `enabled=true`, `catalogBuilt=true` and a non-zero `chance`, then `!mir_pool` — an empty pool means your filters exclude everything you have. Remember the defaults: modded equipment only, with cosmetics and consumables off, and one roll at 25%. A quiet session is not by itself evidence of a problem.
+
+**Q: Will MIR give me the same item twice?**
+A: Not equipment. **What MIR guarantees: equipment never spawns twice in the same save.** When MIR gives you a weapon, armour piece, ring, amulet or cosmetic garment, it removes that item's template from the live pool and records it in a per-save ledger stored in the savegame's mod variables. Every time the save loads, the ledger is read back and every recorded item is removed from the pool again. So across an entire playthrough, no piece of equipment is handed out a second time by MIR. Consumables (potions, arrows, ingredients, scrolls) are deliberately exempt and can repeat. Two limits: MIR only controls its own spawns, not the game's or another mod's (see the next question), and a reload re-rolls — if you load a save from before a container was opened, that container rolls again, because the earlier attempt's ledger entry went with the discarded save state.
 
 **Q: I got the same item twice.**
 A: With **Include base-game items** on, that is expected: the game places vanilla items by hand, on level data MIR cannot see, so it cannot know an item is already waiting for you. That is why the setting defaults to off. Modded items are different — MIR *can* see when a mod places its own item and keeps those out by default; `!mir_placed_mods` names the mods that place their own items, which are the only ones you could ever get twice.
