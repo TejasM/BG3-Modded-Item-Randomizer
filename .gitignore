@@ -1,0 +1,5 @@
+*.pak
+*.docx
+*.pdf
+_archive_builds/
+MIR-*/

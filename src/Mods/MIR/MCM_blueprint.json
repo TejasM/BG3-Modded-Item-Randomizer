@@ -1,0 +1,698 @@
+{
+  "SchemaVersion": 1,
+  "ModName": "MIR - Modded Item Randomizer",
+  "Tabs": [
+    {
+      "TabId": "mir_tab_general",
+      "TabName": "General",
+      "Settings": [
+        {
+          "Id": "mir_enabled",
+          "Name": "Enable MIR",
+          "Type": "checkbox",
+          "Default": true,
+          "Description": "Master switch. When off, MIR never rolls or injects anything."
+        },
+        {
+          "Id": "mir_base_chance",
+          "Name": "Base spawn chance (%)",
+          "Type": "slider_int",
+          "Default": 25,
+          "Options": {
+            "Min": 0,
+            "Max": 100
+          },
+          "Description": "Chance that ANYTHING spawns at a looting opportunity (first stage of the two-stage roll). Category shares decide WHAT spawns - set those on the MIR Browser tab."
+        },
+        {
+          "Id": "mir_rolls",
+          "Name": "Rolls per looting opportunity",
+          "Type": "slider_int",
+          "Default": 1,
+          "Options": {
+            "Min": 0,
+            "Max": 10
+          },
+          "Description": "Independent attempts per container/corpse, each at the base spawn chance."
+        },
+        {
+          "Id": "mir_include_corpses",
+          "Name": "Roll on corpses",
+          "Type": "checkbox",
+          "Default": true,
+          "Description": "Roll when a corpse is first looted (in addition to treasure containers)."
+        },
+        {
+          "Id": "mir_include_clutter",
+          "Name": "Include clutter containers",
+          "Type": "checkbox",
+          "Default": false,
+          "Description": "Also roll on crates, barrels, vases and similar clutter. Default: treasure-tier containers only (chests, strongboxes, buried caches...)."
+        },
+        {
+          "Id": "mir_exclude_nautiloid",
+          "Name": "Exclude the Nautiloid",
+          "Type": "checkbox",
+          "Default": true,
+          "Description": "Never spawn anything during the Nautiloid prologue."
+        },
+        {
+          "Id": "mir_notify_spawns",
+          "Name": "Show item-received notification on spawn",
+          "Type": "checkbox",
+          "Default": false,
+          "Description": "Use the game's item-received toast when MIR injects an item. Off = silent (items simply appear in the loot)."
+        },
+        {
+          "Id": "mir_clutter_consumables_only",
+          "Name": "Clutter containers: consumables only",
+          "Type": "checkbox",
+          "Default": true,
+          "Description": "When MIR rolls on a clutter container (vases, barrels, crates, urns), restrict it to potions, arrows and alchemy ingredients instead of the whole pool - so a barrel stops handing you a greatsword. Has no effect unless 'Include clutter containers' is on. This also ADMITS consumables - vanilla AND modded - into clutter containers even when the Pool tab's consumable settings are off, and into clutter ONLY: items admitted this way never appear in chests, on corpses, in wardrobes or in bookshelves, whatever the Pool tab says. If a Pool consumable setting is also on, those consumables are available everywhere and clutter draws from them as well. Alchemy ingredients ignore the rarity window (see the Rarity tab)."
+        },
+        {
+          "Id": "mir_include_wardrobes",
+          "Name": "Spawn in wardrobes and closets",
+          "Type": "checkbox",
+          "Default": true,
+          "Description": "Treat wardrobes and closets as their own container class instead of lumping them in with clutter, so they can be switched on separately and filled with clothing rather than whatever the pool happens to contain. Your own camp wardrobe is never touched. Off = MIR ignores wardrobes entirely, even if clutter containers are on."
+        },
+        {
+          "Id": "mir_wardrobe_cosmetics",
+          "Name": "Wardrobes: cosmetic garments",
+          "Type": "checkbox",
+          "Default": true,
+          "Description": "Allow camp clothing, camp shoes and underwear to spawn in wardrobes. This works even when 'Include cosmetics' on the Pool tab is off - a wardrobe setting decides what may appear IN A WARDROBE, and is not overruled by the pool-wide switch."
+        },
+        {
+          "Id": "mir_wardrobe_stat_garments",
+          "Name": "Wardrobes: garments with stats",
+          "Type": "checkbox",
+          "Default": true,
+          "Description": "Allow armour worn on the body - body armour, helmets, gloves, boots and cloaks - to spawn in wardrobes. Weapons, shields, rings and amulets are not garments and are covered by the next setting instead."
+        },
+        {
+          "Id": "mir_wardrobe_all_items",
+          "Name": "Wardrobes: also spawn non-garment items",
+          "Type": "checkbox",
+          "Default": false,
+          "Description": "ADDS everything else - weapons, shields, rings, amulets and consumables - on top of whichever garment boxes above are ticked. It does not replace them. If all three wardrobe content settings are unticked the wardrobe is simply unrestricted, because the 'Spawn in wardrobes' switch above is the real on/off control."
+        },
+        {
+          "Id": "mir_include_bookshelves",
+          "Name": "Spawn in bookshelves and desks",
+          "Type": "checkbox",
+          "Default": true,
+          "Description": "Treat bookcases, bookshelves, book rows, stacks and piles, scroll shelves and desks as their own container class instead of lumping them in with clutter, so they can be switched on separately and filled with scrolls rather than arrows. Off = MIR ignores them entirely, even if clutter containers are on. Name-matched, so apothecary and tailor desks count as desks and a scroll-shelf wine rack counts as a scroll shelf. Scroll detection is a heuristic (stat name, category or use type); a modded scroll that follows none of the vanilla conventions stays out of the pool."
+        },
+        {
+          "Id": "mir_bookshelf_scrolls",
+          "Name": "Bookshelves: scrolls",
+          "Type": "checkbox",
+          "Default": true,
+          "Description": "Allow scrolls - vanilla and modded - to spawn in bookshelves. This works even when 'Include scrolls' on the Pool tab is off: a bookshelf setting decides what may appear IN A BOOKSHELF and is not overruled by the pool-wide switch. Scrolls admitted this way appear in bookshelves ONLY - never in chests, on corpses, in wardrobes or in clutter. Unlike wardrobes, unticking BOTH bookshelf content settings makes bookshelves spawn nothing at all. (With 'Include scrolls' on the Pool tab AND 'also spawn all other items' both on, scrolls are simply one of the pool-wide categories a bookshelf may draw, whatever this box says.)"
+        },
+        {
+          "Id": "mir_bookshelf_all_items",
+          "Name": "Bookshelves: also spawn all other items",
+          "Type": "checkbox",
+          "Default": false,
+          "Description": "ADDS every other category - equipment, cosmetics and consumables, each subject to its own Pool setting - on top of scrolls. It does not replace them. With this on, scrolls compete with everything else in a bookshelf and their share slider on the MIR Browser tab becomes active; with it off, scrolls are the only thing a bookshelf can hold and the slider is inactive (100%)."
+        }
+      ]
+    },
+    {
+      "TabId": "mir_tab_pool",
+      "TabName": "Pool",
+      "Settings": [
+        {
+          "Id": "mir_include_base_game",
+          "Name": "Include base-game items",
+          "Type": "checkbox",
+          "Default": false,
+          "Description": "Let vanilla (non-modded) equipment enter the pool. Story and quest items are always hard-excluded."
+        },
+        {
+          "Id": "mir_include_cosmetics",
+          "Name": "Include cosmetics",
+          "Type": "checkbox",
+          "Default": false,
+          "Description": "Camp clothing, camp shoes and underwear categories."
+        },
+        {
+          "Id": "mir_include_consumables_modded",
+          "Name": "Include modded consumables",
+          "Type": "checkbox",
+          "Default": false,
+          "Description": "Modded potions/elixirs, arrows and alchemy ingredients everywhere MIR rolls. Consumables are never duplicate-limited - they can drop repeatedly. Not needed for barrels alone: 'Clutter containers: consumables only' admits them into clutter by itself."
+        },
+        {
+          "Id": "mir_include_consumables_base",
+          "Name": "Include base-game consumables",
+          "Type": "checkbox",
+          "Default": false,
+          "Description": "Vanilla potions/elixirs, arrows and alchemy ingredients EVERYWHERE MIR rolls (independent of the base-game items toggle). You do not need this for barrels: 'Clutter containers: consumables only' already admits vanilla consumables into clutter, and only clutter."
+        },
+        {
+          "Id": "mir_include_scrolls",
+          "Name": "Include scrolls",
+          "Type": "checkbox",
+          "Default": false,
+          "Description": "Let scrolls into the whole pool - chests, corpses, clutter (when clutter is unrestricted) and wardrobes (with 'also spawn non-garment items'). ONE switch for vanilla AND modded scrolls, deliberately: it is not affected by 'Include base-game items' or by either consumables setting, so with it on you will find vanilla scrolls in chests even with base-game items off. Off (the default) does NOT stop bookshelves: 'Bookshelves: scrolls' admits them there on its own. Scrolls are consumables - they can drop repeatedly and are never duplicate-limited."
+        },
+        {
+          "Id": "mir_exclude_utility_mods",
+          "Name": "Exclude known utility mods",
+          "Type": "checkbox",
+          "Default": true,
+          "Description": "Keep items from known utility mods (photo-mode tools, cheat/tutorial-chest spawners, framework libraries) out of the pool. Recommended ON. Note: NPC/companion gear mods (starting-gear upgrades, NPC redesigns) are ALWAYS excluded and have no toggle - that gear belongs to its intended character."
+        },
+        {
+          "Id": "mir_exclude_treasure_items",
+          "Name": "Exclude items their mod already places in the world",
+          "Type": "checkbox",
+          "Default": true,
+          "Description": "Keep out of the pool any MODDED item that a mod already places where you would FIND it - on a specific NPC, or in a specific world container such as a reward chest - so MIR never hands you a duplicate of an authored drop. Merchant stock does NOT count (buying is not finding), and neither do camp chests, tutorial chests or traveller's chests. Applies to modded equipment only: base-game items and consumables are never affected. Items a quest mod spawns from its own script cannot be detected - exclude those by hand in the MIR Browser tab. Run !mir_tables in the server console for a full report of what is excluded from MIR's spawn pool and why. This only ever stops MIR spawning a copy - it never removes anything the game or another mod gives you."
+        }
+      ]
+    },
+    {
+      "TabId": "mir_tab_rarity",
+      "TabName": "Rarity",
+      "Settings": [
+        {
+          "Id": "mir_rarity_window_enabled",
+          "Name": "Limit rarity by level and Act",
+          "Type": "checkbox",
+          "Default": false,
+          "Description": "Off (the default) = every rarity can spawn at every level and in every Act, which is how MIR has always behaved. On = the settings below apply. The rule that applies is the MOST RESTRICTIVE of your level band and your Act: the higher of the two minimums, and the LOWER of the two maximums. So lowering either one restricts the loot immediately. If a band and an Act do not overlap at all, MIR narrows to a single tier and says which two rules disagreed in the log. ALCHEMY INGREDIENTS IGNORE THIS WINDOW: the game declares no rarity for any ingredient, so they are all filed as Common and a window above Common would silently remove every one of them. Potions, arrows and scrolls do declare rarities and obey the window."
+        },
+        {
+          "Id": "mir_rw_lvl1_min",
+          "Name": "Levels 1-5: lowest rarity",
+          "Type": "enum",
+          "Default": "Common",
+          "Options": {
+            "Choices": [
+              "Common",
+              "Uncommon",
+              "Rare",
+              "VeryRare",
+              "Legendary"
+            ]
+          },
+          "Description": "The least valuable rarity MIR may spawn while your character is at levels 1-5. The rule that applies is the MOST RESTRICTIVE of your level band and your Act: the higher of the two minimums, and the LOWER of the two maximums. So lowering either one restricts the loot immediately. If a band and an Act do not overlap at all, MIR narrows to a single tier and says which two rules disagreed in the log. Alchemy ingredients ignore the window entirely (the game declares no rarity for them). Other items whose mod does not declare a rarity are filed as Common, and most cosmetic and clothing mods declare none - so setting a minimum above Common removes far more of the pool than you might expect. Run !mir_rarity to see how many items actually fall inside the window you have set."
+        },
+        {
+          "Id": "mir_rw_lvl1_max",
+          "Name": "Levels 1-5: highest rarity",
+          "Type": "enum",
+          "Default": "Legendary",
+          "Options": {
+            "Choices": [
+              "Common",
+              "Uncommon",
+              "Rare",
+              "VeryRare",
+              "Legendary"
+            ]
+          },
+          "Description": "The most valuable rarity MIR may spawn while your character is at levels 1-5. The rule that applies is the MOST RESTRICTIVE of your level band and your Act: the higher of the two minimums, and the LOWER of the two maximums. So lowering either one restricts the loot immediately. If a band and an Act do not overlap at all, MIR narrows to a single tier and says which two rules disagreed in the log. Alchemy ingredients ignore the window entirely (the game declares no rarity for them)."
+        },
+        {
+          "Id": "mir_rw_lvl2_min",
+          "Name": "Levels 6-10: lowest rarity",
+          "Type": "enum",
+          "Default": "Common",
+          "Options": {
+            "Choices": [
+              "Common",
+              "Uncommon",
+              "Rare",
+              "VeryRare",
+              "Legendary"
+            ]
+          },
+          "Description": "The least valuable rarity MIR may spawn while your character is at levels 6-10. The rule that applies is the MOST RESTRICTIVE of your level band and your Act: the higher of the two minimums, and the LOWER of the two maximums. So lowering either one restricts the loot immediately. If a band and an Act do not overlap at all, MIR narrows to a single tier and says which two rules disagreed in the log. Alchemy ingredients ignore the window entirely (the game declares no rarity for them). Other items whose mod does not declare a rarity are filed as Common, and most cosmetic and clothing mods declare none - so setting a minimum above Common removes far more of the pool than you might expect. Run !mir_rarity to see how many items actually fall inside the window you have set."
+        },
+        {
+          "Id": "mir_rw_lvl2_max",
+          "Name": "Levels 6-10: highest rarity",
+          "Type": "enum",
+          "Default": "Legendary",
+          "Options": {
+            "Choices": [
+              "Common",
+              "Uncommon",
+              "Rare",
+              "VeryRare",
+              "Legendary"
+            ]
+          },
+          "Description": "The most valuable rarity MIR may spawn while your character is at levels 6-10. The rule that applies is the MOST RESTRICTIVE of your level band and your Act: the higher of the two minimums, and the LOWER of the two maximums. So lowering either one restricts the loot immediately. If a band and an Act do not overlap at all, MIR narrows to a single tier and says which two rules disagreed in the log. Alchemy ingredients ignore the window entirely (the game declares no rarity for them)."
+        },
+        {
+          "Id": "mir_rw_lvl3_min",
+          "Name": "Levels 11-15: lowest rarity",
+          "Type": "enum",
+          "Default": "Common",
+          "Options": {
+            "Choices": [
+              "Common",
+              "Uncommon",
+              "Rare",
+              "VeryRare",
+              "Legendary"
+            ]
+          },
+          "Description": "The least valuable rarity MIR may spawn while your character is at levels 11-15. The rule that applies is the MOST RESTRICTIVE of your level band and your Act: the higher of the two minimums, and the LOWER of the two maximums. So lowering either one restricts the loot immediately. If a band and an Act do not overlap at all, MIR narrows to a single tier and says which two rules disagreed in the log. Alchemy ingredients ignore the window entirely (the game declares no rarity for them). Other items whose mod does not declare a rarity are filed as Common, and most cosmetic and clothing mods declare none - so setting a minimum above Common removes far more of the pool than you might expect. Run !mir_rarity to see how many items actually fall inside the window you have set."
+        },
+        {
+          "Id": "mir_rw_lvl3_max",
+          "Name": "Levels 11-15: highest rarity",
+          "Type": "enum",
+          "Default": "Legendary",
+          "Options": {
+            "Choices": [
+              "Common",
+              "Uncommon",
+              "Rare",
+              "VeryRare",
+              "Legendary"
+            ]
+          },
+          "Description": "The most valuable rarity MIR may spawn while your character is at levels 11-15. The rule that applies is the MOST RESTRICTIVE of your level band and your Act: the higher of the two minimums, and the LOWER of the two maximums. So lowering either one restricts the loot immediately. If a band and an Act do not overlap at all, MIR narrows to a single tier and says which two rules disagreed in the log. Alchemy ingredients ignore the window entirely (the game declares no rarity for them)."
+        },
+        {
+          "Id": "mir_rw_lvl4_min",
+          "Name": "Levels 16-20+: lowest rarity",
+          "Type": "enum",
+          "Default": "Common",
+          "Options": {
+            "Choices": [
+              "Common",
+              "Uncommon",
+              "Rare",
+              "VeryRare",
+              "Legendary"
+            ]
+          },
+          "Description": "The least valuable rarity MIR may spawn while your character is at levels 16-20+. The rule that applies is the MOST RESTRICTIVE of your level band and your Act: the higher of the two minimums, and the LOWER of the two maximums. So lowering either one restricts the loot immediately. If a band and an Act do not overlap at all, MIR narrows to a single tier and says which two rules disagreed in the log. Alchemy ingredients ignore the window entirely (the game declares no rarity for them). Other items whose mod does not declare a rarity are filed as Common, and most cosmetic and clothing mods declare none - so setting a minimum above Common removes far more of the pool than you might expect. Run !mir_rarity to see how many items actually fall inside the window you have set."
+        },
+        {
+          "Id": "mir_rw_lvl4_max",
+          "Name": "Levels 16-20+: highest rarity",
+          "Type": "enum",
+          "Default": "Legendary",
+          "Options": {
+            "Choices": [
+              "Common",
+              "Uncommon",
+              "Rare",
+              "VeryRare",
+              "Legendary"
+            ]
+          },
+          "Description": "The most valuable rarity MIR may spawn while your character is at levels 16-20+. The rule that applies is the MOST RESTRICTIVE of your level band and your Act: the higher of the two minimums, and the LOWER of the two maximums. So lowering either one restricts the loot immediately. If a band and an Act do not overlap at all, MIR narrows to a single tier and says which two rules disagreed in the log. Alchemy ingredients ignore the window entirely (the game declares no rarity for them)."
+        },
+        {
+          "Id": "mir_rw_act1_min",
+          "Name": "Act 1: lowest rarity",
+          "Type": "enum",
+          "Default": "Common",
+          "Options": {
+            "Choices": [
+              "Common",
+              "Uncommon",
+              "Rare",
+              "VeryRare",
+              "Legendary"
+            ]
+          },
+          "Description": "The least valuable rarity MIR may spawn during Act 1. The rule that applies is the MOST RESTRICTIVE of your level band and your Act: the higher of the two minimums, and the LOWER of the two maximums. So lowering either one restricts the loot immediately. If a band and an Act do not overlap at all, MIR narrows to a single tier and says which two rules disagreed in the log. Alchemy ingredients ignore the window entirely (the game declares no rarity for them). Other items whose mod does not declare a rarity are filed as Common, and most cosmetic and clothing mods declare none - so setting a minimum above Common removes far more of the pool than you might expect. Run !mir_rarity to see how many items actually fall inside the window you have set."
+        },
+        {
+          "Id": "mir_rw_act1_max",
+          "Name": "Act 1: highest rarity",
+          "Type": "enum",
+          "Default": "Legendary",
+          "Options": {
+            "Choices": [
+              "Common",
+              "Uncommon",
+              "Rare",
+              "VeryRare",
+              "Legendary"
+            ]
+          },
+          "Description": "The most valuable rarity MIR may spawn during Act 1. The rule that applies is the MOST RESTRICTIVE of your level band and your Act: the higher of the two minimums, and the LOWER of the two maximums. So lowering either one restricts the loot immediately. If a band and an Act do not overlap at all, MIR narrows to a single tier and says which two rules disagreed in the log. Alchemy ingredients ignore the window entirely (the game declares no rarity for them)."
+        },
+        {
+          "Id": "mir_rw_act2_min",
+          "Name": "Act 2: lowest rarity",
+          "Type": "enum",
+          "Default": "Common",
+          "Options": {
+            "Choices": [
+              "Common",
+              "Uncommon",
+              "Rare",
+              "VeryRare",
+              "Legendary"
+            ]
+          },
+          "Description": "The least valuable rarity MIR may spawn during Act 2. The rule that applies is the MOST RESTRICTIVE of your level band and your Act: the higher of the two minimums, and the LOWER of the two maximums. So lowering either one restricts the loot immediately. If a band and an Act do not overlap at all, MIR narrows to a single tier and says which two rules disagreed in the log. Alchemy ingredients ignore the window entirely (the game declares no rarity for them). Other items whose mod does not declare a rarity are filed as Common, and most cosmetic and clothing mods declare none - so setting a minimum above Common removes far more of the pool than you might expect. Run !mir_rarity to see how many items actually fall inside the window you have set."
+        },
+        {
+          "Id": "mir_rw_act2_max",
+          "Name": "Act 2: highest rarity",
+          "Type": "enum",
+          "Default": "Legendary",
+          "Options": {
+            "Choices": [
+              "Common",
+              "Uncommon",
+              "Rare",
+              "VeryRare",
+              "Legendary"
+            ]
+          },
+          "Description": "The most valuable rarity MIR may spawn during Act 2. The rule that applies is the MOST RESTRICTIVE of your level band and your Act: the higher of the two minimums, and the LOWER of the two maximums. So lowering either one restricts the loot immediately. If a band and an Act do not overlap at all, MIR narrows to a single tier and says which two rules disagreed in the log. Alchemy ingredients ignore the window entirely (the game declares no rarity for them)."
+        },
+        {
+          "Id": "mir_rw_act3_min",
+          "Name": "Act 3: lowest rarity",
+          "Type": "enum",
+          "Default": "Common",
+          "Options": {
+            "Choices": [
+              "Common",
+              "Uncommon",
+              "Rare",
+              "VeryRare",
+              "Legendary"
+            ]
+          },
+          "Description": "The least valuable rarity MIR may spawn during Act 3. The rule that applies is the MOST RESTRICTIVE of your level band and your Act: the higher of the two minimums, and the LOWER of the two maximums. So lowering either one restricts the loot immediately. If a band and an Act do not overlap at all, MIR narrows to a single tier and says which two rules disagreed in the log. Alchemy ingredients ignore the window entirely (the game declares no rarity for them). Other items whose mod does not declare a rarity are filed as Common, and most cosmetic and clothing mods declare none - so setting a minimum above Common removes far more of the pool than you might expect. Run !mir_rarity to see how many items actually fall inside the window you have set."
+        },
+        {
+          "Id": "mir_rw_act3_max",
+          "Name": "Act 3: highest rarity",
+          "Type": "enum",
+          "Default": "Legendary",
+          "Options": {
+            "Choices": [
+              "Common",
+              "Uncommon",
+              "Rare",
+              "VeryRare",
+              "Legendary"
+            ]
+          },
+          "Description": "The most valuable rarity MIR may spawn during Act 3. The rule that applies is the MOST RESTRICTIVE of your level band and your Act: the higher of the two minimums, and the LOWER of the two maximums. So lowering either one restricts the loot immediately. If a band and an Act do not overlap at all, MIR narrows to a single tier and says which two rules disagreed in the log. Alchemy ingredients ignore the window entirely (the game declares no rarity for them)."
+        }
+      ]
+    },
+    {
+      "TabId": "mir_tab_excludes",
+      "TabName": "Exclusion lists",
+      "Sections": [
+        {
+          "SectionId": "mir_exclusion_lists",
+          "SectionName": "Exclusion lists",
+          "Settings": [
+            {
+              "Id": "mir_view_utility_excluded",
+              "Name": "Utility mods currently excluded (read-only)",
+              "Type": "list_v2",
+              "Default": {
+                "Enabled": true,
+                "Elements": []
+              },
+              "Options": {
+                "PageSize": 20,
+                "ShowSearchBar": true,
+                "ReadOnly": true
+              },
+              "Description": "DISPLAY ONLY. MIR's shipped utility-mod list, filtered to mods present in your load order. Checked = currently excluded (follows the 'Exclude known utility mods' toggle on the Pool tab). Ticking, unticking or Reset here has NO effect - the list refreshes itself automatically."
+            },
+            {
+              "Id": "mir_view_npcgear_excluded",
+              "Name": "NPC / character gear mods - ALWAYS excluded (read-only)",
+              "Type": "list_v2",
+              "Default": {
+                "Enabled": true,
+                "Elements": []
+              },
+              "Options": {
+                "PageSize": 20,
+                "ShowSearchBar": true,
+                "ReadOnly": true
+              },
+              "Description": "DISPLAY ONLY. Gear meant for a specific NPC or companion (starting-gear upgrades, NPC redesigns) - permanently excluded, no toggle exists. Filtered to mods present in your load order. Ticking, unticking or Reset here has NO effect."
+            },
+            {
+              "Id": "mir_excluded_mod_uuids",
+              "Name": "Excluded mods (checked = excluded)",
+              "Type": "list_v2",
+              "Default": {
+                "Enabled": true,
+                "Elements": []
+              },
+              "Options": {
+                "PageSize": 10,
+                "ShowSearchBar": true
+              },
+              "Description": "Mod UUIDs whose items never enter the pool. Managed by the MIR Browser tab (which shows readable names); editable here as a fallback."
+            },
+            {
+              "Id": "mir_excluded_templates",
+              "Name": "Excluded items (checked = excluded)",
+              "Type": "list_v2",
+              "Default": {
+                "Enabled": true,
+                "Elements": []
+              },
+              "Options": {
+                "PageSize": 10,
+                "ShowSearchBar": true
+              },
+              "Description": "Root-template UUIDs of individual items that never enter the pool. Managed by the MIR Browser tab; editable here as a fallback."
+            },
+            {
+              "Id": "mir_force_included_templates",
+              "Name": "Allowed in anyway (checked = allowed in despite being placed)",
+              "Type": "list_v2",
+              "Default": {
+                "Enabled": true,
+                "Elements": []
+              },
+              "Options": {
+                "PageSize": 10,
+                "ShowSearchBar": true
+              },
+              "Description": "Root-template UUIDs of items you have deliberately allowed into the pool even though their own mod already places them in the world. A DUPLICATE BECOMES POSSIBLE for each one: you may find the item where the mod puts it AND as MIR loot. Managed by the MIR Browser tab, which warns you at the moment you choose; editable here as a fallback. User exclusions still win. Has no effect while the placement filter on the Pool tab is off, because nothing is being fenced."
+            }
+          ]
+        },
+        {
+          "SectionId": "mir_hidden_storage",
+          "SectionName": "Category share storage (not shown)",
+          "VisibleIf": {
+            "LogicalOperator": "and",
+            "Conditions": [
+              {
+                "SettingId": "mir_enabled",
+                "Operator": "==",
+                "ExpectedValue": true
+              },
+              {
+                "SettingId": "mir_enabled",
+                "Operator": "==",
+                "ExpectedValue": false
+              }
+            ]
+          },
+          "Settings": [
+            {
+              "Id": "mir_share_weapon",
+              "Name": "Weapons",
+              "Type": "slider_int",
+              "Default": 50,
+              "Options": {
+                "Min": 0,
+                "Max": 100
+              },
+              "Description": "Storage only - set this on the MIR Browser tab, which shows each category's live percentage beside its slider. Relative weight. A category's real probability is its weight divided by the sum of the weights of the categories it competes with in a given container type - live percentages and the ON / LIMITED / OFF status are on the MIR Browser tab. 0 disables the category."
+            },
+            {
+              "Id": "mir_share_shield",
+              "Name": "Shields",
+              "Type": "slider_int",
+              "Default": 50,
+              "Options": {
+                "Min": 0,
+                "Max": 100
+              },
+              "Description": "Storage only - set this on the MIR Browser tab, which shows each category's live percentage beside its slider. Relative weight (live percentages with sliders: MIR Browser tab)."
+            },
+            {
+              "Id": "mir_share_torso",
+              "Name": "Body armour",
+              "Type": "slider_int",
+              "Default": 50,
+              "Options": {
+                "Min": 0,
+                "Max": 100
+              },
+              "Description": "Storage only - set this on the MIR Browser tab, which shows each category's live percentage beside its slider. Relative weight (live percentages with sliders: MIR Browser tab)."
+            },
+            {
+              "Id": "mir_share_helmet",
+              "Name": "Helmets",
+              "Type": "slider_int",
+              "Default": 50,
+              "Options": {
+                "Min": 0,
+                "Max": 100
+              },
+              "Description": "Storage only - set this on the MIR Browser tab, which shows each category's live percentage beside its slider. Relative weight (live percentages with sliders: MIR Browser tab)."
+            },
+            {
+              "Id": "mir_share_gloves",
+              "Name": "Gloves",
+              "Type": "slider_int",
+              "Default": 50,
+              "Options": {
+                "Min": 0,
+                "Max": 100
+              },
+              "Description": "Storage only - set this on the MIR Browser tab, which shows each category's live percentage beside its slider. Relative weight (live percentages with sliders: MIR Browser tab)."
+            },
+            {
+              "Id": "mir_share_boots",
+              "Name": "Boots",
+              "Type": "slider_int",
+              "Default": 50,
+              "Options": {
+                "Min": 0,
+                "Max": 100
+              },
+              "Description": "Storage only - set this on the MIR Browser tab, which shows each category's live percentage beside its slider. Relative weight (live percentages with sliders: MIR Browser tab)."
+            },
+            {
+              "Id": "mir_share_cloak",
+              "Name": "Cloaks",
+              "Type": "slider_int",
+              "Default": 50,
+              "Options": {
+                "Min": 0,
+                "Max": 100
+              },
+              "Description": "Storage only - set this on the MIR Browser tab, which shows each category's live percentage beside its slider. Relative weight (live percentages with sliders: MIR Browser tab)."
+            },
+            {
+              "Id": "mir_share_ring",
+              "Name": "Rings",
+              "Type": "slider_int",
+              "Default": 50,
+              "Options": {
+                "Min": 0,
+                "Max": 100
+              },
+              "Description": "Storage only - set this on the MIR Browser tab, which shows each category's live percentage beside its slider. Relative weight (live percentages with sliders: MIR Browser tab)."
+            },
+            {
+              "Id": "mir_share_amulet",
+              "Name": "Amulets",
+              "Type": "slider_int",
+              "Default": 50,
+              "Options": {
+                "Min": 0,
+                "Max": 100
+              },
+              "Description": "Storage only - set this on the MIR Browser tab, which shows each category's live percentage beside its slider. Relative weight (live percentages with sliders: MIR Browser tab)."
+            },
+            {
+              "Id": "mir_share_vanityClothing",
+              "Name": "Camp clothing",
+              "Type": "slider_int",
+              "Default": 50,
+              "Options": {
+                "Min": 0,
+                "Max": 100
+              },
+              "Description": "Storage only - set this on the MIR Browser tab, which shows each category's live percentage beside its slider. Relative weight. Only active while cosmetics are included."
+            },
+            {
+              "Id": "mir_share_vanityBoots",
+              "Name": "Camp shoes",
+              "Type": "slider_int",
+              "Default": 50,
+              "Options": {
+                "Min": 0,
+                "Max": 100
+              },
+              "Description": "Storage only - set this on the MIR Browser tab, which shows each category's live percentage beside its slider. Relative weight. Only active while cosmetics are included."
+            },
+            {
+              "Id": "mir_share_underwear",
+              "Name": "Underwear",
+              "Type": "slider_int",
+              "Default": 50,
+              "Options": {
+                "Min": 0,
+                "Max": 100
+              },
+              "Description": "Storage only - set this on the MIR Browser tab, which shows each category's live percentage beside its slider. Relative weight. Only active while cosmetics are included."
+            },
+            {
+              "Id": "mir_share_potion",
+              "Name": "Potions and elixirs",
+              "Type": "slider_int",
+              "Default": 50,
+              "Options": {
+                "Min": 0,
+                "Max": 100
+              },
+              "Description": "Storage only - set this on the MIR Browser tab, which shows each category's live percentage beside its slider. Relative weight. Only takes effect while consumables are included (Pool tab) or admitted for clutter containers."
+            },
+            {
+              "Id": "mir_share_arrow",
+              "Name": "Arrows",
+              "Type": "slider_int",
+              "Default": 50,
+              "Options": {
+                "Min": 0,
+                "Max": 100
+              },
+              "Description": "Storage only - set this on the MIR Browser tab, which shows each category's live percentage beside its slider. Relative weight. Only takes effect while consumables are included (Pool tab) or admitted for clutter containers."
+            },
+            {
+              "Id": "mir_share_alchemyIngredient",
+              "Name": "Alchemy ingredients",
+              "Type": "slider_int",
+              "Default": 50,
+              "Options": {
+                "Min": 0,
+                "Max": 100
+              },
+              "Description": "Storage only - set this on the MIR Browser tab, which shows each category's live percentage beside its slider. Relative weight. Only takes effect while consumables are included (Pool tab) or admitted for clutter containers. Alchemy ingredients ignore the rarity window."
+            },
+            {
+              "Id": "mir_share_scroll",
+              "Name": "Scrolls",
+              "Type": "slider_int",
+              "Default": 50,
+              "Options": {
+                "Min": 0,
+                "Max": 100
+              },
+              "Description": "Storage only - set this on the MIR Browser tab, which shows each category's live percentage beside its slider. Relative weight. Only takes effect while scrolls are included (Pool tab) or admitted for bookshelves; inactive while scrolls are the only thing bookshelves may hold."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
