@@ -35,7 +35,7 @@ Once installed (see `INSTALL.md`), it works out of the box:
 - **Modded loot where you actually find loot** — treasure chests, strongboxes, coffers, sarcophagi and the like, and every corpse you loot for the first time. Pre-placed bodies count; no combat required.
 - **Wardrobes give clothing.** Closets and wardrobes are their own container type, on by default, filled with cosmetic garments and stat-bearing armour rather than greatswords. Your camp wardrobe is never touched.
 - **Bookshelves give scrolls.** Bookcases, book rows, stacks and piles, scroll shelves and desks are their own type, on by default, holding scrolls — vanilla and modded — with an option to add everything else.
-- **Clutter gives consumables.** Off by default. When on, barrels, crates, vases and urns hand out potions, arrows and alchemy ingredients — vanilla and modded — and those items never leak into chests.
+- **Clutter gives consumables.** Off by default. When on, barrels, crates, vases and urns hand out potions, arrows and alchemy ingredients — vanilla and modded — and those items never leak into chests. One detail worth knowing: a vase you walked past while clutter was switched off is not lost. MIR stamps it as "skipped because clutter was off", which is a retryable mark, so it becomes eligible the first time you open it after turning clutter on.
 - **A two-stage roll you can tune.** *How often* (base chance and rolls per opportunity) is separate from *what* (a 0–100 slider per category). The MIR Browser shows each category's live percentage per container type.
 - **Equipment never spawns twice in the same save — guaranteed.** When MIR gives you a weapon, armour piece, ring, amulet or cosmetic garment, it removes that item's template from the live pool and records it in a per-save ledger stored in the savegame's mod variables. Every time the save loads, the ledger is read back and every recorded item is removed from the pool again. So across an entire playthrough, no piece of equipment is handed out a second time by MIR. Consumables — potions, arrows, ingredients, scrolls — are deliberately exempt and can repeat.
 - **Exclusion browser.** Every mod contributing items, sorted by count; drill into a mod and tick out a whole mod or a single item. Changes apply immediately and persist per MCM profile.
@@ -170,6 +170,9 @@ A: The status is derived, not stored — read the reason on the row. OFF with `w
 
 **Q: Arrows and ingredients show up in barrels but never in chests.**
 A: By design. With the Pool tab's consumable settings off, consumables reach clutter only through the clutter setting, and those are scoped to clutter. Turn on **Include base-game consumables** or **Include modded consumables** if you want them everywhere.
+
+**Q: I turned clutter on part-way through a playthrough. Do the barrels and vases I already walked past count?**
+A: Yes. One detail worth knowing: a vase you walked past while clutter was switched off is not lost. MIR stamps it as "skipped because clutter was off", which is a retryable mark, so it becomes eligible the first time you open it after turning clutter on. The same applies to wardrobes and bookshelves switched on later. Only a container MIR actually rolled on, or deliberately left alone (owned, camp storage), stays finished with.
 
 **Q: I only ever see items from one or two mods.**
 A: The pool is proportional to how many eligible items each mod contributes, and a single large clothing pack can contribute hundreds. `!mir_mods` writes a per-mod breakdown; exclude the pack in the MIR Browser, or lower the categories it dominates.
