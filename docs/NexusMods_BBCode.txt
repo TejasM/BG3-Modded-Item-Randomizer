@@ -91,7 +91,7 @@ Also expected to coexist, on code-level analysis rather than a joint playtest: [
 [*][b]Auto-loot / loot-vacuum mods may bypass MIR.[/b] MIR rolls on the engine events fired when a player opens a container or first loots a corpse; a mod that empties containers at a distance may not fire them. First thing to check if you never see spawns.
 [*][b]Remote container access[/b] (remote camp-chest commands and the like) bypasses MIR entirely. By design.
 [*][b]Quest mods:[/b] items placed on a specific NPC or in a specific world container are kept out by default and StoryItem/IsKey templates are always excluded, but items a quest mod spawns from its own script can't be detected — exclude such a mod by hand if you want certainty.
-[*][b]Multiplayer:[/b] MIR is server-authoritative and [b]the host manages the settings[/b]. Non-host exclusion writes are refused.
+[*][b]Multiplayer:[/b] every player needs MIR, Script Extender and MCM on the same versions as the host (the game compares mod lists when a player joins, and it cannot download a Nexus mod for you). MIR is server-authoritative: its loot logic runs only on the host, so each container is rolled once and every player sees the same items, and [b]the host manages the settings[/b]. Non-host settings changes are refused. Not yet tested in a live multiplayer session; reports welcome.
 [/list]
 
 [line]

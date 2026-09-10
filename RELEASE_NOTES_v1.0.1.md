@@ -9,7 +9,7 @@ Seeds the modded equipment already in your load order into treasure containers, 
 | File | SHA256 |
 |---|---|
 | MIR.pak (102,369 bytes) | `E9E92040A0701557777AD31F62B26D270A687A3756E9D67957AF80204F8791CD` |
-| MIR-1.0.1.zip | `35A9721DBE5E690D4F979FE636170F6AFD70F474FB402DC58F17466AF7060F53` |
+| MIR-1.0.1.zip | `1631132515CF854C79D97307ED6CF58ABA5D9A975D7AAE5A57E9C8E9D2B6E6E7` |
 
 Source for this build is the `main` branch at this tag. See `docs/CHANGELOG.md` for the full development history.
 

@@ -141,7 +141,7 @@ MIR makes exactly eight engine calls, and only one of them changes anything: the
 - **Auto-loot and loot-vacuum mods may bypass MIR.** MIR rolls on the events fired when a player opens a container or first loots a corpse; a mod that empties containers at a distance may not fire them. First thing to check if you never see spawns.
 - **Remote container access** (remote camp-chest commands and the like) bypasses MIR entirely, by design.
 - **Quest mods.** Items placed on a specific NPC or in a specific world container are kept out by default, but items a quest mod spawns from its own script cannot be detected. Exclude such a mod by hand if you want certainty.
-- **Multiplayer.** MIR is server-authoritative and **the host manages the settings**. Any player can browse the pool; exclusion writes from non-host players are refused with a message saying so.
+- **Multiplayer.** Every player needs MIR, Script Extender and MCM installed, on the same versions as the host; the game compares mod lists when a player joins. MIR is server-authoritative: its loot logic runs only on the host, and **the host manages the settings**. Any player can browse the pool; settings changes from non-host players are refused with a message saying so. See the FAQ. MIR has not yet been tested in a live multiplayer session.
 
 ## Known limitations
 
@@ -185,6 +185,9 @@ A: Yes. Items MIR already gave you are ordinary items from mods you still have; 
 
 **Q: Can I install it mid-playthrough?**
 A: Yes. MIR only sees containers and corpses you interact with after it is installed.
+
+**Q: In multiplayer, does every player need MIR installed?**
+A: Yes. Every player needs MIR, BG3 Script Extender and Mod Configuration Menu, on the same versions as the host. That is the game's own rule since Patch 7: when you join a session, the game compares your mod list with the host's, and it cannot download a Nexus mod for you, so a player without MIR will not be able to join. This does not put two copies of MIR to work on the same loot. Script Extender runs MIR's loot logic on the host's machine only; on everyone else's machine MIR just provides the MIR Browser tab. Whoever opens a chest or loots a corpse, the roll happens once, on the host, and every player sees the same items. The host's MCM settings apply to the whole party, and the rarity window's level rule uses the host character's level. Other players can browse the pool but cannot change settings. MIR has not yet been tested in a live multiplayer session, so reports are welcome.
 
 **Q: Does it work with a controller?**
 A: Gameplay is unaffected either way, but MCM's window — and therefore all of MIR's configuration — is mouse and keyboard.

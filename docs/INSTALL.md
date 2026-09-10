@@ -34,6 +34,8 @@ MIR is safe to add to a playthrough already in progress. It only sees containers
 
 5. **Load any save, or start a new game.** MIR builds its item pool as the session loads and starts rolling on the first container or corpse you open.
 
+**Playing multiplayer?** Every player installs the same MIR, Script Extender and MCM versions, with MCM above MIR. The game compares mod lists when a player joins, and it cannot download a Nexus mod for you. MIR's loot logic runs on the host only, and the host's MCM settings apply to the whole party. See the multiplayer question in the FAQ of `README.md`.
+
 ## Verify it loaded
 
 **1. The Script Extender console banner.** With the Script Extender console open, MIR prints one line at startup, beginning with its version:
