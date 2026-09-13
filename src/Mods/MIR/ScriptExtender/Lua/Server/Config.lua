@@ -6,6 +6,10 @@ MIR = MIR or {}
 
 MIR.Config = {
     enabled = true,
+    powerEnabled = true,
+    powerStrictUnknown = false,
+    powerOverrides = {}, -- keyed by template UUID (preferred) or stat name; see docs/POWER.md
+
     dryRun = false,   -- classify + log, but never inject (!mir_dry on|off)
 
     -- Roll model: per looting opportunity, `rolls` independent attempts, each

@@ -3,3 +3,5 @@
 *.pdf
 _archive_builds/
 MIR-*/
+__pycache__/
+.venv/

@@ -693,6 +693,26 @@
           ]
         }
       ]
+    },
+    {
+      "TabId": "mir_tab_power",
+      "TabName": "Power",
+      "Settings": [
+        {
+          "Id": "mir_power_enabled",
+          "Name": "Gate equipment by estimated power",
+          "Type": "checkbox",
+          "Default": true,
+          "Description": "Experimental: evaluates bonuses and passives, then requires both a minimum host level and Act. Declared rarity remains a lower bound. Stacks with the Rarity window. Browser shares do not include this progression gate."
+        },
+        {
+          "Id": "mir_power_strict",
+          "Name": "Exclude equipment with unknown effects",
+          "Type": "checkbox",
+          "Default": false,
+          "Description": "When enabled, equipment with unrecognized effects or unresolved references cannot spawn. Otherwise it is held until at least level 8 / Act 2. Custom scripts may be invisible to analysis. Use !mir_power <stat name> to inspect."
+        }
+      ]
     }
   ]
 }

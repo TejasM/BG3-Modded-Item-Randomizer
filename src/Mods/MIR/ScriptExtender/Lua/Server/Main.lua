@@ -301,6 +301,7 @@ end
 -- modded one (the v0.9 BL-2 / S-1 leak), but the entry can. filter == nil rejects every
 -- scoped entry, which is the right meaning for "an unrestricted container".
 local function entryAllowedFor(e, filter)
+    if filter and filter.powerContext and not MIR.Power.Allowed(e, filter.powerContext) then return false end
     local class = filter and filter.class or nil
     if e.clutterOnly and class ~= "clutter" then return false end
     if e.bookshelfOnly and class ~= "bookshelf" then return false end
@@ -631,6 +632,11 @@ end
 --               container type (clutter-only / bookshelf-only)
 --   exhausted - the pool really has nothing for this container
 local function drawOne(filter)
+    local originalFilter = filter
+    local scopedFilter = {}
+    for k, v in pairs(filter or {}) do scopedFilter[k] = v end
+    scopedFilter.powerContext = MIR.Power.Context()
+    filter = scopedFilter
     local cfg = MIR.Config
     local pool = MIR.Catalog.pool
     local minTier, maxTier = effectiveRarityWindow()
@@ -648,6 +654,13 @@ local function drawOne(filter)
         end
         local cat = weightedPick(catOptions)
         if not cat then
+            -- Explain a power hold separately; do not relax the gate on redraw.
+            for c, slices in pairs(pool) do
+                local lo, hi = tierRangeFor(c, minTier, maxTier)
+                if categoryEnabled(c, originalFilter) and catHasAllowedInRange(slices, lo, hi, originalFilter) then
+                    return nil, "power"
+                end
+            end
             -- (a) would an UNRESTRICTED container of this class find something? -> the content filter
             if filter and (filter.allowed or filter.allowCosmetics ~= nil
                            or filter.allowConsumables ~= nil or filter.allowScrolls ~= nil) then
@@ -776,6 +789,8 @@ local function rollAndInject(targetOsi, sourceTag, filter)
                         .. " (class=%s) - no-op. It allows: %s. Loosen the filter for this container"
                         .. " type, or fix the category it needs (!mir_pool for counts).")
                         :format(sourceTag, tostring(filter and filter.class or "?"), explainFilterMiss(filter)))
+                elseif why == "power" then
+                    log(sourceTag .. ": equipment held by power progression or unknown-effect policy; inspect with !mir_power <stat>")
                 elseif why == "window" then
                     local mn, mx = MIR.EffectiveRarityWindow()
                     log(("%s: roll succeeded but NOTHING IN THE POOL IS INSIDE YOUR RARITY WINDOW"

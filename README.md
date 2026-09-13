@@ -1,3 +1,11 @@
+# MIR power-aware distribution fork
+
+Experimental extension of [SerpentineShel's MIR](https://github.com/Shiney1965/BG3-Modded-Item-Randomizer), retaining its MIT license and attribution. Adds stat/passive-based equipment scoring and minimum level/Act gates. See [implementation, controls and limitations](docs/POWER.md). Source prototype; not yet tested in BG3.
+
+The upstream documentation below describes the base mod; this fork adds the Power tab and progression gate.
+
+---
+
 # MIR — Modded Item Randomizer
 
 **Takes all of your modded equipment and seeds it into the world's loot, according to your specifications. This mod gives you clear, detailed controls in MCM over where modded items are placed — in treasure chests, on corpses, in wardrobes, in bookshelves and in barrels, each chosen separately — at a rate you control. Wardrobes give you clothing, bookshelves give you scrolls, barrels give you potions and arrows, and you can have the mod give you more kinds of item in each container if you want. The mod is strictly additive: it never removes, replaces, moves or reprices anything.**

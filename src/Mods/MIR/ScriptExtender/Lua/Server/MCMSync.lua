@@ -15,6 +15,8 @@ end
 
 -- settingId -> config field + whether a pool rebuild is needed (design §3.3)
 local SETTING_MAP = {
+    { id = "mir_power_enabled", field = "powerEnabled", rebuild = false, kind = "bool" },
+    { id = "mir_power_strict", field = "powerStrictUnknown", rebuild = false, kind = "bool" },
     { id = "mir_enabled",                    field = "enabled",                  rebuild = false, kind = "bool" },
     { id = "mir_base_chance",                field = "baseChancePct",            rebuild = false, kind = "int" },
     { id = "mir_rolls",                      field = "rolls",                    rebuild = false, kind = "int" },

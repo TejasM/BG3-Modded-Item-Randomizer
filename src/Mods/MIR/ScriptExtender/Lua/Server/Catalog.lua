@@ -172,6 +172,7 @@ function MIR.BuildCatalog()
                         -- v1.0: the same shape for scrolls admitted only because bookshelves
                         -- asked (includeScrolls off). Drawable in bookshelves and nowhere else.
                         bookshelfOnly = bookshelfOnly or false }
+        entry.power = MIR.Power.Assess(entry)
         -- User exclusion check sits HERE, after full classification (B2): the
         -- entry is retained with all metadata so the browser can un-exclude it.
         -- skippedExcluded therefore counts otherwise-ELIGIBLE entries only.
