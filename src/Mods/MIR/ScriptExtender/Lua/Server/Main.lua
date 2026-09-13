@@ -301,6 +301,7 @@ end
 -- modded one (the v0.9 BL-2 / S-1 leak), but the entry can. filter == nil rejects every
 -- scoped entry, which is the right meaning for "an unrestricted container".
 local function entryAllowedFor(e, filter)
+    if e.power and not e.power.exempt and not e.managed then return false end
     if filter and filter.powerContext and not MIR.Power.Allowed(e, filter.powerContext) then return false end
     local class = filter and filter.class or nil
     if e.clutterOnly and class ~= "clutter" then return false end

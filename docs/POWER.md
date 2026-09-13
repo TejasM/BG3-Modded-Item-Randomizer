@@ -1,9 +1,7 @@
 # Experimental power-aware distribution
 
 This fork adds an equipment power gate to MIR's existing world-loot selection.
-It does not add merchant stock, equip NPCs, remove original mod placements, or
-guarantee that every installed item will appear. MIR's exclusions, category
-weights, declared-rarity window, container rules and spawn ledger still apply.
+It now also controls identified convenience-chest deliveries and merchant stock; see [Access controls](ACCESS.md). Only equipment positively associated with those sources enters the redistribution pool. Detected authored placements win. MIR's category weights, rarity window, container rules and spawn ledger still apply.
 
 The fork retains MIR's module identity and save ledger. Use it as a replacement
 for upstream MIR, not as a second mod loaded alongside it. This branch has not
@@ -78,7 +76,7 @@ No runtime code from other mods is evaluated by this classifier.
 
 Next: export assessments from a real load order, compare vanilla progression
 anchors, add stat-family baselines and status/recharge analysis, then tune the
-weights. Merchant/boss reward placement is separate future work.
+weights. Boss reward placement is separate future work. Merchant access gates are implemented in Access.lua.
 
 ## Development and verification
 

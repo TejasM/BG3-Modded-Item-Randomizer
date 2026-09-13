@@ -713,6 +713,26 @@
           "Description": "When enabled, equipment with unrecognized effects or unresolved references cannot spawn. Otherwise it is held until at least level 8 / Act 2. Custom scripts may be invisible to analysis. Use !mir_power <stat name> to inspect."
         }
       ]
+    },
+    {
+      "TabId": "mir_tab_access",
+      "TabName": "Access",
+      "Settings": [
+        {
+          "Id": "mir_suppress_convenience",
+          "Name": "Suppress identified convenience-chest deliveries",
+          "Type": "checkbox",
+          "Default": true,
+          "Description": "Move identified modded equipment deliveries into hidden storage for world redistribution. Protects player-handled items and ambiguous pre-existing/scripted stock. Authored placements remain exempt. Disable and reopen the source chest to return held items."
+        },
+        {
+          "Id": "mir_gate_merchants",
+          "Name": "Gate identified merchant stock by power",
+          "Type": "checkbox",
+          "Default": true,
+          "Description": "Hold identified generated modded stock until host level and Act meet the power gate. Exact items return when you revisit the trader. Sold items and unknown pre-existing stock are protected. Before uninstalling, disable both Access options and run !mir_access restore in every region with held items."
+        }
+      ]
     }
   ]
 }

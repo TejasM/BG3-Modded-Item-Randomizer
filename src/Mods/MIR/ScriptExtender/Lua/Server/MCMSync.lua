@@ -15,6 +15,8 @@ end
 
 -- settingId -> config field + whether a pool rebuild is needed (design §3.3)
 local SETTING_MAP = {
+    { id="mir_suppress_convenience", field="suppressConvenience", rebuild=false, kind="bool" },
+    { id="mir_gate_merchants", field="gateMerchants", rebuild=false, kind="bool" },
     { id = "mir_power_enabled", field = "powerEnabled", rebuild = false, kind = "bool" },
     { id = "mir_power_strict", field = "powerStrictUnknown", rebuild = false, kind = "bool" },
     { id = "mir_enabled",                    field = "enabled",                  rebuild = false, kind = "bool" },

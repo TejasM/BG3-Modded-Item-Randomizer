@@ -105,14 +105,16 @@ end
 -- Deliberately its OWN list rather than borrowing Config.excludePatterns (review
 -- S1): those two lists answer different questions ("never inject here" vs "this
 -- is not an authored placement") and must be free to diverge. Matched
--- case-insensitively and kept deliberately WIDE, because a false negative here
+-- Narrowed in the power-aware fork: generic storage/traveller/TUT names are not
+-- evidence of a delivery chest. Historical rationale below no longer applies.
+-- Previously kept deliberately WIDE, because a false negative here
 -- re-creates the exact catastrophe this rewrite exists to prevent (a mod that
 -- ships a tutorial chest having its whole catalogue fenced), while a false
 -- positive merely leaves one more item in the pool.
 local CONVENIENCE_PATTERNS = {
-    "campchest", "chest_camp", "cont_camp", "tutorial", "tut_chest", "tut_",
-    "travellerschest", "travelerschest", "traveller", "traveler", "storage",
+    "tutorialchest", "tutorial_chest", "playercampchest",
 }
+
 local function isConvenienceName(name)
     if type(name) ~= "string" or name == "" then return false end
     local low = name:lower()
@@ -146,9 +148,10 @@ end
 
 local function collectPlacementTables(deadline, stats)
     local roots, skipped, refs = {}, {}, {}
+    local delivery = { merchant = {}, convenience = {} }
 
     local templates = tryGet(function() return Ext.Template.GetAllRootTemplates() end)
-    if templates == nil then return roots, skipped, false end
+    if templates == nil then return roots, skipped, false, delivery end
 
     local shapeLogged = false
     local timedOut = false
@@ -172,7 +175,9 @@ local function collectPlacementTables(deadline, stats)
             local function note(raw, kind, isPlacement)
                 local tbl = asTableName(raw)
                 if type(tbl) ~= "string" or tbl == "" or tbl == "Empty" then return end
+                if tbl == "TUT_Chest_Potions" then kind, isPlacement = "convenience", false end
                 refs[tbl] = (refs[tbl] or 0) + 1
+                if delivery[kind] then delivery[kind][tbl] = { via=tname, kind=kind } end
                 if isPlacement then
                     if not roots[tbl] then roots[tbl] = { via = tname, kind = kind } end
                 elseif not roots[tbl] and not skipped[tbl] then
@@ -250,7 +255,7 @@ local function collectPlacementTables(deadline, stats)
         if o.kind == "npc" then stats.npcTables = stats.npcTables + 1
         else stats.containerTables = stats.containerTables + 1 end
     end
-    return roots, skipped, timedOut
+    return roots, skipped, timedOut, delivery
 end
 
 -- ---------------- pass 2: expand the placement tables into item names ----------------
@@ -266,7 +271,7 @@ expandCategory = function(catName, origin, ctx)
         return
     end
     ctx.stats.categories = ctx.stats.categories + 1
-    pcall(function()
+    local walkOK = pcall(function()
         for _, item in ipairs(tc.Items or {}) do
             local n = item and item.Name
             if type(n) == "string" and n ~= "" then
@@ -280,6 +285,7 @@ expandCategory = function(catName, origin, ctx)
             end
         end
     end)
+    if not walkOK then ctx.timedOut = true; ctx.stats.aborted = true end
 end
 
 resolveTable = function(name, origin, ctx)
@@ -289,6 +295,10 @@ resolveTable = function(name, origin, ctx)
     if Ext.Utils.MonotonicTime() > ctx.deadline then ctx.timedOut = true return end
 
     local tt = tryGet(function() return Ext.Stats.TreasureTable.GetLegacy(name) end)
+    local bareName = deprefix(name, "T_")
+    if type(tt) ~= "table" and bareName then
+        tt = tryGet(function() return Ext.Stats.TreasureTable.GetLegacy(bareName) end)
+    end
     if type(tt) ~= "table" then
         ctx.stats.missingTables = ctx.stats.missingTables + 1
         ctx.done[name] = true
@@ -298,15 +308,13 @@ resolveTable = function(name, origin, ctx)
     ctx.active[name] = true
     ctx.depth = ctx.depth + 1
 
-    pcall(function()
+    local walkOK = pcall(function()
         for _, sub in ipairs(tt.SubTables or {}) do
             for _, cat in ipairs(sub.Categories or {}) do
                 local nested = asTableName(cat and cat.TreasureTable)
                 if type(nested) == "string" and nested ~= "" and nested ~= "Empty" then
                     -- a nested table inherits the provenance of whoever referenced it
                     resolveTable(nested, origin, ctx)
-                    local bare = deprefix(nested, "T_")
-                    if bare then resolveTable(bare, origin, ctx) end
                 end
                 local catName = cat and cat.TreasureCategory
                 if type(catName) == "string" and catName ~= "" then
@@ -316,6 +324,7 @@ resolveTable = function(name, origin, ctx)
         end
     end)
 
+    if not walkOK then ctx.timedOut = true; ctx.stats.aborted = true end
     ctx.depth = ctx.depth - 1
     ctx.active[name] = nil
     if not ctx.timedOut then ctx.done[name] = true end
@@ -326,26 +335,39 @@ function MIR.BuildTreasureIndex(reason)
     local t0 = Ext.Utils.MonotonicTime()
     local stats = newStats()
 
-    local roots, skipped, timedOut1 = collectPlacementTables(t0 + PASS1_MS, stats)
+    local roots, skipped, timedOut1, delivery = collectPlacementTables(t0 + PASS1_MS, stats)
 
     local ctx = { names = {}, done = {}, doneCat = {}, active = {}, depth = 0,
                   deadline = t0 + BUDGET_MS, timedOut = timedOut1, stats = stats }
 
+    if tryGet(function() return Ext.Stats.TreasureTable.GetLegacy("TUT_Chest_Potions") end) then
+        delivery.convenience.TUT_Chest_Potions = {kind="convenience", via="tutorial chest"}
+    end
     local nRoots = 0
     for tableName, origin in pairs(roots) do
         nRoots = nRoots + 1
         if not ctx.timedOut then
             local o = { table = tableName, via = origin.via, kind = origin.kind }
             resolveTable(tableName, o, ctx)
-            local bare = deprefix(tableName, "T_")
-            if bare then resolveTable(bare, o, ctx) end
         end
     end
     stats.rootTables = nRoots
+    -- Expand each source class independently: a shared table can serve both a
+    -- vendor and an authored reward. Authored placement always wins below.
+    local deliveryNames = {}
+    for _, kind in ipairs({"merchant", "convenience"}) do
+        local dc = {names={}, done={}, doneCat={}, active={}, depth=0,
+            deadline=t0+BUDGET_MS, timedOut=false, stats=newStats()}
+        for name, origin in pairs(delivery[kind]) do resolveTable(name, origin, dc) end
+        deliveryNames[kind] = dc.names
+        if dc.timedOut or dc.stats.missingTables > 0 or dc.stats.missingCategories > 0
+            or dc.stats.depthCapped > 0 then ctx.timedOut = true end
+    end
 
     MIR.TreasureIndex = {
         built = true,
         names = ctx.names,
+        deliveryNames = deliveryNames,
         skipped = skipped,
         stats = stats,
         source = (nRoots > 0) and "rootTemplates" or "none",
@@ -474,4 +496,21 @@ function MIR.TreasureReport()
     lines[#lines + 1] = "(name / category / treasure table <- [why: which NPC or container])"
     for _, l in ipairs(fenced) do lines[#lines + 1] = l end
     return lines
+end
+
+-- A positive delivery source and a complete placement scan are required.
+function MIR.DeliverySource(stat, template, uuid)
+    local idx = MIR.TreasureIndex
+    if not idx or not idx.built or idx.partial or idx.source == "error" then return nil end
+    if idx.stats.missingTables > 0 or idx.stats.missingCategories > 0
+        or idx.stats.depthCapped > 0 or idx.stats.aborted then return nil end
+    if MIR.HasTreasureDistribution(stat, template) then return nil end
+    local persisted = tryGet(function() return Ext.Vars.GetModVariables(ModuleUUID).AccessState end)
+    local observed = persisted and persisted.sources and persisted.sources[uuid]
+    if observed == "merchant" or observed == "convenience" then return observed end
+    for _, kind in ipairs({"merchant", "convenience"}) do
+        local names = (idx.deliveryNames or {})[kind] or {}
+        if names[stat] or names["I_" .. (stat or "")]
+            or names[template] or names["I_" .. (template or "")] then return kind end
+    end
 end

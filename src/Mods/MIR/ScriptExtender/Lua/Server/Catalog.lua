@@ -126,7 +126,7 @@ function MIR.BuildCatalog()
     -- who do not want the feature never pay for the scan. Deliberately OUTSIDE the
     -- builtMs window — it logs its own timing line and would otherwise make the
     -- first "Catalog built in N ms" line unreadable.
-    if MIR.Config.excludeTreasureTableItems and MIR.EnsureTreasureIndex then
+    if MIR.EnsureTreasureIndex then
         pcall(function() MIR.EnsureTreasureIndex("catalog") end)
     end
     local t0 = Ext.Utils.MonotonicTime()
@@ -173,6 +173,9 @@ function MIR.BuildCatalog()
                         -- asked (includeScrolls off). Drawable in bookshelves and nowhere else.
                         bookshelfOnly = bookshelfOnly or false }
         entry.power = MIR.Power.Assess(entry)
+        entry.deliverySource = MIR.DeliverySource and MIR.DeliverySource(statName, tplName, tplId)
+        -- Keep non-managed equipment visible for diagnostics, but never draw it.
+        entry.managed = not entry.base and not entry.power.exempt and entry.deliverySource ~= nil
         -- User exclusion check sits HERE, after full classification (B2): the
         -- entry is retained with all metadata so the browser can un-exclude it.
         -- skippedExcluded therefore counts otherwise-ELIGIBLE entries only.

@@ -7,6 +7,10 @@ MIR = MIR or {}
 MIR.Config = {
     enabled = true,
     powerEnabled = true,
+    suppressConvenience = true,
+    gateMerchants = true,
+    convenienceContainers = {}, -- exact instance/template UUID -> true, for delivery chests
+
     powerStrictUnknown = false,
     powerOverrides = {}, -- keyed by template UUID (preferred) or stat name; see docs/POWER.md
 

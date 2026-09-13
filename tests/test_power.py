@@ -93,8 +93,8 @@ class PowerTests(unittest.TestCase):
             function categoryEnabled() return true end
             function tierRangeFor(_,lo,hi) return lo,hi end
             function effectiveRarityWindow() return 1,5 end
-            weak={stat='weak',power=assess('WeaponEnchantment(1)')}
-            strong={stat='strong',power=assess('ActionResource(ActionPoint,1,0)')}
+            weak={stat='weak',managed=true,power=assess('WeaponEnchantment(1)')}
+            strong={stat='strong',managed=true,power=assess('ActionResource(ActionPoint,1,0)')}
             MIR.Catalog={pool={weapon={Common={weak,strong}}}}
         ''' + helpers + draw + '\nDrawForTest=drawOne')
         for _ in range(100):

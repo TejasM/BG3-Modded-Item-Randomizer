@@ -3,6 +3,8 @@
 Ext.Vars.RegisterModVariable(ModuleUUID, "SpawnedItems", { Server = true, Client = false, SyncToClient = false })
 Ext.Vars.RegisterUserVariable("MIR_Processed", { Server = true, Client = false, Persistent = true, WriteableOnServer = true, SyncToClient = false })
 
+Ext.Vars.RegisterModVariable(ModuleUUID, "AccessState", { Server=true, Client=false, SyncToClient=false })
+
 Ext.Require("Shared/Channels.lua") -- channels must exist in BOTH contexts
 Ext.Require("Server/Config.lua")
 -- pcall: a brand-new module must never be able to take the whole mod down;
@@ -13,3 +15,5 @@ Ext.Require("Server/Catalog.lua")
 Ext.Require("Server/MCMSync.lua") -- before Main: its SessionLoaded sync must run before the catalog build
 Ext.Require("Server/Browser.lua")
 Ext.Require("Server/Main.lua")
+
+Ext.Require("Server/Access.lua")

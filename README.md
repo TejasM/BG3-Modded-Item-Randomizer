@@ -2,7 +2,9 @@
 
 Experimental extension of [SerpentineShel's MIR](https://github.com/Shiney1965/BG3-Modded-Item-Randomizer), retaining its MIT license and attribution. Adds stat/passive-based equipment scoring and minimum level/Act gates. See [implementation, controls and limitations](docs/POWER.md). Source prototype; not yet tested in BG3.
 
-The upstream documentation below describes the base mod; this fork adds the Power tab and progression gate.
+This fork now adds Power and Access tabs, identified-delivery suppression, and merchant gates. See [Access behavior and restore instructions](docs/ACCESS.md).
+
+The upstream documentation below is historical: its **strictly additive** and **safe to remove mid-playthrough** descriptions do not apply to this fork. Restore held instances before uninstalling.
 
 ---
 
